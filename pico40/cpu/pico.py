@@ -8,6 +8,26 @@ from .decoder import InstructionDecoder
 __all__ = ['Pico', 'DefinePico', 'INSTN']
 
 INSTN = 16
+A0 = 0xAAAA
+A1 = 0xCCCC
+A2 = 0xF0F0
+A3 = 0xFF00
+
+def TFF(has_ce=False, has_reset=False, edge=True, sync=True):
+
+    """A T flip-flop."""
+
+    tff = FF(has_ce=has_ce, has_reset=has_reset, edge=edge, sync=sync)
+    lut = LUT( A0^A1, 2)
+    tff(lut)
+
+    wire(tff.O, lut.I0)
+
+    args = ["I", lut.I1, "O", tff.O, "CLK", tff.CLK]
+    if has_ce:    args += ['CE', dff.CE]
+    if has_reset: args += ['RESET', dff.R]
+    #if has_set:   args += ['SET', dff.S]
+    return AnonymousCircuit(*args)
 
 def DefinePico(ADDRN, DATAN, debug=None):
 

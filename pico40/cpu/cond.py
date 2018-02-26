@@ -3,8 +3,13 @@ from mantle import *
 
 __all__ = ['Cond']
 
+A0 = 0xAAAA
+A1 = 0xCCCC
+A2 = 0xF0F0
+A3 = 0xFF00
+
 def ROM4(x):
-    return uncurry(LUT4(x))
+    return uncurry(LUT(x, 4))
 
 class Cond(Circuit):
     IO = ["inst", In(Bits(4)), 
@@ -27,11 +32,11 @@ class Cond(Circuit):
 
         condz  = Decode(0, 4)(cond) #jz
         condnz = Decode(1, 4)(cond) #jnz
-        jumpz = LUT3((I0&I2)|(I1&~I2))(condz, condnz, z)
+        jumpz = LUT((A0&A2)|(A1&~A2), 3)(condz, condnz, z)
 
         condc  = Decode(2, 4)(cond) #jc
         condnc = Decode(3, 4)(cond) #jnc
-        jumpc = LUT3((I0&I2)|(I1&~I2))(condc, condnc, c)
+        jumpc = LUT((A0&A2)|(A1&~A2), 3)(condc, condnc, c)
 
         always = Decode(15, 4)(cond)
 

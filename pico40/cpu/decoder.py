@@ -1,16 +1,20 @@
 from magma import *
 from mantle import *
-from mantle.lattice.ice40 import ROMB
 from ..mem import read as readmem
 from .seq import Sequencer
 from .alu import ALU
 from .cond import Cond
 
+A0 = 0xAAAA
+A1 = 0xCCCC
+A2 = 0xF0F0
+A3 = 0xFF00
+
 def ROM2(x):
-    return uncurry(LUT2(x))
+    return uncurry(LUT(x, 2))
 
 def ROM4(x):
-    return uncurry(LUT4(x))
+    return uncurry(LUT(x, 4))
 
 
 class InstructionDecoder(Circuit):
@@ -55,7 +59,7 @@ class InstructionDecoder(Circuit):
 
         jump = Cond()(insttype, cond, z, c)
 
-        regwr = LUT3((I0|I1)&I2)(aluinst, ld, phase)
+        regwr = LUT((A0|A1)&A2, 3)(aluinst, ld, phase)
 
         zwr =  And(2)(aluinst, phase)
         cwr =  And(2)(arithinst, phase)

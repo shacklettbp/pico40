@@ -1,4 +1,5 @@
 from magma import *
+from magma.bitutils import seq2int
 from mantle import *
 
 __all__  = ['DefineLogic', 'Logic']
@@ -32,7 +33,7 @@ def DefineLogic(n):
                         else:
                             return A^B
 
-                return LUT4(logicfunc)
+                return LUT(logicfunc, 4)
 
             logic = braid(col(logic, n), joinargs=['I0', 'I1'], forkargs=['I2', 'I3'])
             wire(io.A, logic.I0)
@@ -83,7 +84,7 @@ def DefineArith(n):
             #  SUBC    1   1   1   0
             #
             truth = [0, 0, 1, 1, 0, 1, 1, 0]
-            cin = LUT3(truth)(io.CIN, io.SUB, io.CARRY)
+            cin = LUT(seq2int(truth), 3)(io.CIN, io.SUB, io.CARRY)
 
             wire( io.B, inv.I )
 

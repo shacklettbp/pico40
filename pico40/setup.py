@@ -1,6 +1,5 @@
 from magma import *
 from mantle import *
-from mantle.lattice.ice40 import ROMB
 from loam.boards.icestick import IceStick
 from pico40 import assemble, Pico
 
