@@ -4,6 +4,8 @@ from magma import *
 from pico40.asm import *
 from pico40.setup import makepico
 from magma.simulator.mdb import simulate
+from magma.simulator.python_simulator import PythonSimulator 
+from magma.simulator.coreir_simulator import CoreIRSimulator
 
 def prog():
     ldlo(r0, 2)
@@ -14,9 +16,11 @@ def prog():
 
 class MainCircuit(Circuit):
     name = 'main'
-    IO = ['I0', In(Bits(8)), 'I1', In(Bits(8)), 'CLK', In(Clock)]
+    IO = ['I', In(Bits(8)), 'O', Out(Bits(8)), 'CLK', In(Clock)]
     @classmethod
     def definition(circuit):
-        pico, romb = makepico(prog, circuit.I0, circuit.I1, 8, 8, None)
+        pico, romb = makepico(prog, circuit.I, circuit.O, 8, 8, None)
 
+#simulate(MainCircuit, PythonSimulator)
+#simulate(MainCircuit, CoreIRSimulator)
 compile('coreir_proc', MainCircuit, output='coreir')

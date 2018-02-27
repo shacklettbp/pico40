@@ -17,7 +17,7 @@ def TFF(has_ce=False, has_reset=False, edge=True, sync=True):
 
     """A T flip-flop."""
 
-    tff = FF(has_ce=has_ce, has_reset=has_reset, edge=edge, sync=sync)
+    tff = FF(has_ce=has_ce, has_reset=has_reset)
     lut = LUT( A0^A1, 2)
     tff(lut)
 
