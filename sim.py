@@ -1,7 +1,8 @@
 import os
 os.environ['MANTLE'] = 'coreir'
+from magma import *
 from pico40.asm import *
-from pico40.setup import makepicoicestick
+from pico40.setup import makepico
 from magma.simulator.mdb import simulate
 
 def prog():
@@ -11,5 +12,11 @@ def prog():
     st(r1, 0)
     jmp(0)
 
-main = makepicoicestick(prog, 8, 8)
-simulate(main)
+class MainCircuit(Circuit):
+    name = 'main'
+    IO = ['I0', In(Bits(8)), 'I1', In(Bits(8)), 'CLK', In(Clock)]
+    @classmethod
+    def definition(circuit):
+        pico, romb = makepico(prog, circuit.I0, circuit.I1, 8, 8, None)
+
+compile('coreir_proc', MainCircuit, output='coreir')

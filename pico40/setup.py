@@ -1,9 +1,13 @@
 from magma import *
 from mantle import *
-from loam.boards.icestick import IceStick
+from mantle.coreir.memory import DefineCoreirMem
 from pico40 import assemble, Pico
 
 __all__ = ['makepico', 'makepicoicestick']
+
+def DefineCoreirRom(height, width):
+    coreir_mem = DefineCoreirMem(height, width)()
+
 
 def makepico(prog, input, output, ADDRN, DATAN, debug):
 
